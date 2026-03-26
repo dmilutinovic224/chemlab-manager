@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3>Dodaj sastojak za "{{ recept.naziv }}"</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Naziv sastojka:</label>
+                        <input type="text" name="naziv" class="form-control" required>
+                        <small class="text-muted">Npr. Brašno, Šećer, Jaja...</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Količina:</label>
+                        <input type="text" name="kolicina" class="form-control" required>
+                        <small class="text-muted">Npr. 200g, 2 kom, 1 kašika...</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">Dodaj sastojak</button>
+                    <a href="{% url 'recept_detail' recept.pk %}" class="btn btn-secondary">Nazad na recept</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

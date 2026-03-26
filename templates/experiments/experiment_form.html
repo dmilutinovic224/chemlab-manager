@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Uredi eksperiment{% else %}Dodaj novi eksperiment{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3>{% if object %}Uredi eksperiment{% else %}Dodaj novi eksperiment{% endif %}</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.title.label }}</label>
+                        {{ form.title }}
+                        {% if form.title.help_text %}
+                            <small class="text-muted">{{ form.title.help_text }}</small>
+                        {% endif %}
+                        {% if form.title.errors %}
+                            <div class="alert alert-danger">{{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.description.label }}</label>
+                        {{ form.description }}
+                        {% if form.description.help_text %}
+                            <small class="text-muted">{{ form.description.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.experiment_type.label }}</label>
+                            {{ form.experiment_type }}
+                            {% if form.experiment_type.help_text %}
+                                <small class="text-muted">{{ form.experiment_type.help_text }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.status.label }}</label>
+                            {{ form.status }}
+                            {% if form.status.help_text %}
+                                <small class="text-muted">{{ form.status.help_text }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        {{ form.is_public }}
+                        <label class="form-check-label" for="{{ form.is_public.id_for_label }}">
+                            {{ form.is_public.label }}
+                        </label>
+                        {% if form.is_public.help_text %}
+                            <small class="text-muted d-block">{{ form.is_public.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        {% if object %}Sačuvaj{% else %}Dodaj eksperiment{% endif %}
+                    </button>
+                    <a href="{% if object %}{% url 'experiment_detail' object.pk %}{% else %}{% url 'experiment_list' %}{% endif %}" 
+                       class="btn btn-secondary">Odustani</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

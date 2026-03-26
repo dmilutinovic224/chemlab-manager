@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero text-center fade-in">
+    <div class="container">
+        <h1><i class="bi bi-capsule"></i>Jedinjenja</h1>
+        <p class="lead">Informacioni sistem za hemijska istrazivanja</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'compound_create' %}" class="btn btn-primary mb-3">Dodaj jedinjenje</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-6 offset-md-3">
+            <form method="get" class="d-flex">
+                <input type="text" name="search" class="form-control me-2"
+                       placeholder="Pretraži po nazivu, formuli..."
+                       value="{{ request.GET.search }}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i> Traži
+                </button>
+            </form>
+        </div>
+    </div>
+    {% if compounds %}
+    <div class="row">
+        {% for compound in compounds %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ compound.name }}</h5>
+                        {% if compound.formula %}
+                            <p class="card-text text-muted"><strong>Formula:</strong> {{ compound.formula }}</p>
+                        {% endif %}
+                        {% if compound.mweight %}
+                        <p class="card-text text-muted">
+                            <strong>MW:</strong> {{ compound.mweight }} g/mol
+                        </p>
+                    {% endif %}
+
+                        <p class="card-text small text-muted">
+                            <i class="bi bi-person"></i> {{ compound.created_by.username }}<br>
+                            <i class="bi bi-calendar"></i> {{ compound.created_at|date:"d.m.Y" }}
+                        </p>
+                        <div>
+                            {% if compound.is_public %}
+                                <span class="badge bg-success"><i class="bi bi-globe"></i> Javno</span>
+                            {% else %}
+                                <span class="badge bg-warning"><i class="bi bi-lock"></i> Privatno</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                     <div class="card-footer bg-transparent">
+                    <a href="{% url 'compound_detail' compound.pk %}" class="btn btn-sm btn-primary">Detalji</a>
+                    {% if user == compound.created_by %}
+                        <a href="{% url 'compound_update' compound.pk %}" class="btn btn-sm btn-warning">Uredi</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-capsule" style="font-size: 4rem; color: #6c757d;"></i>
+        <h3 class="mt-3">Nema jedinjenja</h3>
+        <p class="text-muted">Trenutno nema hemijskih jedinjenja.</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'compound_create' %}" class="btn btn-primary mt-2">
+                <i class="bi bi-plus-circle"></i> Dodaj jedinjenje
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+</div>
+
+{% endblock %}

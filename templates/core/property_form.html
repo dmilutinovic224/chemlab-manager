@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3>Dodaj svojstvo za "{{ compound.name }}"</h3>
+            </div>
+            <div class="card-body">
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {% for field in form %}
+                            {% for err in field.errors %}
+                                <p>{{ err }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Tip svojstvo:</label>
+                            <select name="property_type" class="form-select">
+                            <option value="tt" {% if object.area == tt %}selected{% endif %}>ttopljenja</option>
+                            <option value="tk" {% if object.area == tk %}selected{% endif %}>tkljucanja</option>
+                            <option value="r" {% if object.area == r %}selected{% endif %}>rastvorljivost</option>
+                            <option value="gst" {% if object.area == gst %}selected{% endif %}>gustina</option>
+                            <option value="logp" {% if object.area == logp %}selected{% endif %}>logP</option>
+                            <option value="pk" {% if object.area == pk %}selected{% endif %}>pKa</option>
+                        </select>
+                        <small class="text-muted">...</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Vrednost:</label>
+                        <input type="float" name="value" class="form-control" required>
+                        <small class="text-muted">...</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Jedinica:</label>
+                        <select name="unit" class="form-select">
+                            <option value="(°C)" >(°C)</option>
+                            <option value="(g/L)" >(g/L)</option>
+                            <option value="(g/cm3)" >(g/cm3)</option>
+                            <option value="" ></option>
+                        </select>
+                        <small class="text-muted">...</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">
+                        Dodaj svojstvo
+                    </button>
+                    <a href="{% url 'compound_detail' compound.pk %}" class="btn btn-secondary">Nazad</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,202 @@
+:root {
+    --primary: #2c3e50;
+    --secondary: #3498db;
+    --accent: #27ae60;
+    --light: #ecf0f1;
+    --dark: #2c3e50;
+}
+body {
+    background-image: url('/static/images/UVSpectrography2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    position: relative;
+}
+body:before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: -1;
+    pointer-events: none;
+}
+.hero {
+    background: linear-gradient(rgba(44, 62, 80, 0.85), rgba(52, 152, 219, 0.85)), url('/static/images/f6093c_9462a8cef9414a42baf604560888776d~mv2.avif');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    padding: 120px 0;
+    margin-bottom: 50px;
+    position: relative;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    opacity: 0.95;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+div.card.bg-light {
+    background-color: rgba(255, 255, 255, 0.0) !important;
+}
+
+div.stat-card {
+    background: rgba(255, 255, 255, 0.0);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    color: var(--secondary);
+}
+
+.stat-card {
+    text-align: center;
+    padding: 30px;
+    background: var(--light);
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.stat-label {
+    color: var(--dark);
+    font-size: 1rem;
+}
+
+footer {
+    background: var(--dark);
+    color: white;
+    padding: 40px 0;
+    margin-top: 50px;
+}
+
+footer a {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: white;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+.batch-table {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(5px);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.batch-table thead {
+    background: rgba(44, 62, 80, 0.85) !important;
+    color: white !important;
+}
+
+.batch-table thead th {
+    padding: 12px 15px;
+    font-weight: 600;
+    border: none;
+}
+
+.batch-table tbody tr {
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.batch-table tbody tr:hover {
+    background: rgba(52, 152, 219, 0.1);
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.batch-table tbody td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border: none;
+}
+
+.batch-table .btn-outline-primary {
+    border: none;
+    background: transparent;
+    color: #3498db;
+    transition: all 0.2s;
+}
+
+.batch-table .btn-outline-primary:hover {
+    background: #3498db;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.batch-table .btn-outline-warning {
+    border: none;
+    background: transparent;
+    color: #f39c12;
+}
+
+.batch-table .btn-outline-warning:hover {
+    background: #f39c12;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.batch-table .btn-outline-danger {
+    border: none;
+    background: transparent;
+    color: #e74c3c;
+}
+
+.batch-table .btn-outline-danger:hover {
+    background: #e74c3c;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.batch-table .badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+

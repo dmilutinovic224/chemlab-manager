@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3>Prijava</h3>
+            </div>
+            <div class="card-body">
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        Korisničko ime ili lozinka nisu ispravni.
+                    </div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Korisničko ime:</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Lozinka:</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">Prijavi se</button>
+                </form>
+                
+                <hr>
+                <p>Nemate nalog? <a href="{% url 'register' %}">Registruj se</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h3>Potvrda brisanja jedinjenja</h3>
+            </div>
+            <div class="card-body">
+                <p>Da li ste sigurni da želite obrisati jedinjenje <strong>"{{ chemical.name }}"</strong>?</p>
+                <p class="text-warning">Napomena: Brišu se i sve serije vezane za ovo jedinjenje!</p>
+                <p class="text-danger">Ova radnja je nepovratna!</p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Da, obriši</button>
+                    <a href="{% url 'chemical_detail' chemical.pk %}" class="btn btn-secondary">Odustani</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

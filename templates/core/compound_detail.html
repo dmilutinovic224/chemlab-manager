@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero text-center fade-in">
+    <div class="container">
+        <h1><i class="bi bi-capsule"></i>Info o jedinjenju</h1>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <h1>{{ compound.name }}</h1>
+    </div>
+    {% if compound.category %}
+        <p>
+            <strong>Kategorije:</strong>
+            <span class="badge bg-warning">{{ compound.get_category_display }}</span>
+{#            {% for cc in compound.categores.all %}#}
+{#                <span class="badge bg-warning">{{ cc.category.name }}</span>#}
+{#            {% endfor %}#}
+        </p>
+    {% endif %}
+
+    <div class="card-body">
+        {% if user == compound.created_by %}
+{#        <a href="{% url 'compoundcategory_create' compound.pk %}" class="btn btn-warning btn-sm mb-3">Dodaj kategoriju</a>#}
+            <a href="{% url 'compound_update' compound.pk %}" class="btn btn-warning btn-sm mb-3">Uredi kategoriju</a>
+        {% endif %}
+<!--        <h5>Opis:</h5>-->
+<!--        <p>{{ compound.opis }}</p>-->
+        <h5>Hemijski podaci:</h5>
+        <ul>
+            {% if compound.formula %}
+                <li><strong>Formula:</strong> {{ compound.formula }}</li>
+            {% endif %}
+            {% if compound.mweight %}
+                <li><strong>Molekulska masa:</strong> {{ compound.mweight }} g/mol</li>
+            {% endif %}
+            {% if compound.cas_num %}
+                <li><strong>CAS broj:</strong> {{ compound.cas_num }}</li>
+            {% endif %}
+            {% if compound.smiles %}
+                <li><strong>SMILES:</strong> {{ compound.smiles }}</li>
+            {% endif %}
+            <li><strong>Polje:</strong> {{ compound.get_field_display }}</li>
+        </ul>
+
+        <h5>Detalji:</h5>
+        <ul>
+            <li>Autor: {{ compound.created_by.username }}</li>
+            <li>Dodano: {{ compound.created|date:"d.m.Y" }}</li>
+            <li>Status: {% if compound.public %}Javno{% else %}Privatno{% endif %}</li>
+        </ul>
+
+<!--        {% if user == compound.creator %}-->
+<!--            <a href="{% url 'compound_update' compound.pk %}" class="btn btn-warning">Uredi</a>-->
+<!--            <a href="{% url 'compound_delete' compound.pk %}" class="btn btn-danger">Obrisi</a>-->
+<!--        {% endif %}-->
+<!--        <a href="{% url 'compound_list' %}" class="btn btn-secondary">Nazad</a>-->
+
+        {% if compound.properties.all %}
+        <div class="card mt-4">
+            <div class="card-header bg-secondary text-white">
+                <h5>svojstva:</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for property in compound.properties.all %}
+                        <li class="list-group-item">
+                            <strong>{{ property.get_property_type_display }}</strong>
+                            {{ property.value }} {{ property.unit }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        {% if compound.calcproperties %}
+        <div class="card mt-4">
+            <div class="card-header bg-info text-white">
+                <h5>izracunata svojstva:</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3"><strong>logP:</strong> {{ compound.logp|floatformat:2 }}</div>
+                    <div class="col-md-3"><strong>TPSA:</strong> {{ compound.surface|floatformat:1 }} Å²</div>
+                    <div class="col-md-3"><strong>H-donori:</strong> {{ compound.h_donors }}</div>
+                    <div class="col-md-3"><strong>H-akceptori:</strong> {{ compound.h_acc }}</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if user == compound.created_by %}
+            <a href="{% url 'property_create' compound.pk %}" class="btn btn-success btn-sm mb-3">
+                + Dodaj svojstvo
+            </a>
+        {% endif %}
+        <h5>komentari:</h5>
+        {% if compound.comments.all %}
+            {% for comment in compound.comments.all %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <p class="card-text">{{ comments.text }}</p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                {{ comment.user.username }} - {{ comment.created|date:"d.m.Y H:i" }}
+                            </small>
+                        </p>
+                        {% if user == comment.user %}
+                            <a href="{% url 'comment_delete' comment.pk %}" class="btn btn-sm btn-danger">
+                                Obriši
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">Još nema komentara.</p>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <a href="{% url 'comment_create' compound.pk %}" class="btn btn-info mb-3">
+                Dodaj komentar
+            </a>
+        {% endif %}
+        {% if user == compound.created_by %}
+            <a href="{% url 'compound_update' compound.pk %}" class="btn btn-warning">Uredi</a>
+            <a href="{% url 'compound_delete' compound.pk %}" class="btn btn-danger">Obrisi</a>
+        {% endif %}
+        <a href="{% url 'compound_list' %}" class="btn btn-secondary">Nazad</a>
+    </div>
+</div>
+{% include 'core/includes/smiles.html' %}
+{% endblock %}

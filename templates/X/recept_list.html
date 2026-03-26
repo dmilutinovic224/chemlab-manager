@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Javni recepti</h1>
+
+{% if recepti %}
+    <div class="row">
+        {% for recept in recepti %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recept.naziv }}</h5>
+                        <p class="card-text">{{ recept.opis|truncatechars:100 }}</p>
+                        <p class="text-muted">Autor: {{ recept.autor.username }}</p>
+                        <p class="text-muted">Objavljeno: {{ recept.javno|yesno:"Javno,Privatno" }}</p>
+                        <a href="{% url 'recept_detail' recept.pk %}" class="btn btn-primary">Detalji</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Nema recepata za prikaz.</p>
+{% endif %}
+{% endblock %}

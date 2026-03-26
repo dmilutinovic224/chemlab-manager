@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Jedinjenja{% endblock %}
+
+{% block content %}
+<div class="hero text-center fade-in">
+    <div class="container">
+        <h1><i class="bi bi-capsule"></i>Jedinjenja</h1>
+        <p class="lead">Informacioni sistem za hemijska istrazivanja</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'chemical_create' %}" class="btn btn-primary mb-3">Dodaj jedinjenje</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-6 offset-md-3">
+            <form method="get" class="d-flex">
+                <input type="text" name="search" class="form-control me-2"
+                       placeholder="Pretraži po nazivu, formuli..."
+                       value="{{ request.GET.search }}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i> Traži
+                </button>
+            </form>
+        </div>
+    </div>
+    {% if chemicals %}
+        <div class="row">
+    {% for chemical in chemicals %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ chemical.name }}</h5>
+                    {% if chemical.cas_number %}
+                        <p class="card-text"><strong>cas:</strong> {{ chemical.cas_number }}</p>
+                    {% endif %}
+                    {% if chemical.formula %}
+                        <p class="card-text"><strong>formula:</strong> {{ chemical.formula }}</p>
+                    {% endif %}
+                    {% if chemical.molecular_weight %}
+                        <p class="card-text"><strong>molecular weight:</strong> {{ chemical.molecular_weight }}</p>
+                    {% endif %}
+                    {% if chemical.compound %}}
+                        <p class="card-text"><strong>compound:</strong> {{ chemical.compound.name }}</p>#}
+                    {% endif %}
+                    {% if chemical.un_number %}
+                        <p class="card-text"><strong>un br:</strong> {{ chemical.un_number }}</p>
+                    {% endif %}
+                    {% if chemical.hazard_symbol %}
+                        <p class="card-text"><strong>ghs:</strong> {{ chemical.hazard_symbol }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'chemical_detail' chemical.pk %}" class="btn btn-sm btn-primary">Detalji</a>
+                    {% if chemical.created_by == user %}
+                        <a href="{% url 'chemical_update' chemical.pk %}" class="btn btn-sm btn-warning">Uredi</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-capsule" style="font-size: 4rem; color: #6c757d;"></i>
+        <h3 class="mt-3">Nema jedinjenja</h3>
+        <p class="text-muted">Trenutno nema jedinjenja.</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'chemical_create' %}" class="btn btn-primary mt-2">
+                <i class="bi bi-plus-circle"></i> Dodaj jedinjenje
+            </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

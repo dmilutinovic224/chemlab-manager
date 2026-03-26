@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h3>Potvrda brisanja beleške</h3>
+            </div>
+            <div class="card-body">
+                <p>Da li ste sigurni da želite obrisati ovu belešku?</p>
+                <div class="alert alert-info">
+                    {{ object.note }}
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Da</button>
+                    <a href="{% url 'compound_detail' object.compound.pk %}" class="btn btn-secondary">Odustani</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

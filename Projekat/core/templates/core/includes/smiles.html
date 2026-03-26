@@ -1,0 +1,50 @@
+{% if compound.pdb %}
+<div class="card mt-4">
+    <div class="card-header bg-success text-white">
+        <h5><i class="bi bi-cube"></i> 3D struktura</h5>
+    </div>
+    <div class="card-body"  style="position: relative;">
+        <div id="molViewer" style="height: 400px; width: 100%; position: relative; overflow: hidden;"></div>
+        <div class="text-center mt-2">
+            <a href="{{ compound.pdb.url }}" class="btn btn-sm btn-outline-primary" download>
+                <i class="bi bi-download"></i> Preuzmi strukturu
+            </a>
+        </div>
+    </div>
+</div>
+
+{#    skripta za pokretane prikaza strukture#}
+<script src="https://cdn.jsdelivr.net/npm/3dmol@2.0.1/build/3Dmol-min.js"></script>
+<script>
+    (function() {
+        var url = "{{ compound.pdb.url }}?t=" + new Date().getTime();
+        var viewer = $3Dmol.createViewer("molViewer", {backgroundColor: 0xf8f9fa});
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                viewer.addModel(xhr.responseText, "pdb");
+                viewer.setStyle({}, {stick: {radius: 0.15}, sphere: {scale: 0.3}});
+                viewer.zoomTo();
+                viewer.render();
+            } else if (xhr.readyState === 4) {
+                document.getElementById("molViewer").innerHTML = '<div class="alert alert-warning">PDB fajl nije dostupan (status ' + xhr.status + ')</div>';
+            }
+        };
+        xhr.send();
+    })();
+</script>
+{% endif %}
+
+{% if compound.smiles %}
+<div class="card mt-4">
+    <div class="card-header bg-info text-white">
+        <h5><i class="bi bi-cube"></i> 3D Struktura (online)</h5>
+    </div>
+    <div class="card-body">
+        <iframe src="https://www.ncbi.nlm.nih.gov/Structure/icn3d/full.html?smiles={{ compound.smiles|urlencode }}"
+                width="100%" height="400px" frameborder="0"></iframe>
+    </div>
+</div>
+{% endif %}

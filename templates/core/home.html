@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pocetna - ChemLab Manager{% endblock %}
+
+{% block content %}
+<!-- Hero sekcija -->
+<div class="hero text-center fade-in">
+    <div class="container">
+        <h1><i class="bi bi-capsule"></i> ChemLab Manager</h1>
+        <p class="lead">Informacioni sistem za hemijska istrazivanja</p>
+        {% if not user.is_authenticated %}
+        <div class="mt-4">
+            <a href="{% url 'register' %}" class="btn btn-light btn-lg me-2">
+                <i class="bi bi-person-plus"></i> Zapocni
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-box-arrow-in-right"></i> Prijava
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-number">{{ numcompounds }}</div>
+                <div class="stat-label">Hemijskih jedinjenja</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-number">{{ numliterature }}</div>
+                <div class="stat-label">Naucnih radova</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-number">{{ numexperiments }}</div>
+                <div class="stat-label">Eksperimenata</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-number">{{ numchemicals }}</div>
+                <div class="stat-label">Hemikalija u inventaru</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="bi bi-capsule"></i>
+                    </div>
+                    <h5 class="card-title">Jedinjenja</h5>
+                    <p class="card-text">Pretrazujte i upravljajte hemijskim jedinjenjima, svojstvima i 3D strukturama.</p>
+                    <a href="{% url 'compound_list' %}" class="btn btn-primary">Pregledaj →</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="bi bi-journal-bookmark-fill"></i>
+                    </div>
+                    <h5 class="card-title">Literatura</h5>
+                    <p class="card-text">Biblioteka naucnih radova, clanaka i publikacija iz hemije.</p>
+                    <a href="{% url 'literature_list' %}" class="btn btn-primary">Pregledaj →</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="card-icon">
+                        <i class="bi bi-droplet"></i>
+                    </div>
+                    <h5 class="card-title">Eksperimenti</h5>
+                    <p class="card-text">Dokumentujte i pratite laboratorijske eksperimente i rezultate.</p>
+                    <a href="{% url 'experiment_list' %}" class="btn btn-primary">Pregledaj →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h3 class="text-center mb-4"><i class="bi bi-info-circle"></i> O projektu</h3>
+                    <p class="lead text-center">
+                        ChemLab Manager je  informacioni sistem dizajniran za istrazivače u hemiji.
+                        Omogucava upravljanje jedinjenjima, literaturom, eksperimentima i inventarom.
+                    </p>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle-fill text-success"></i> 3D prikaz hemijskih struktura</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> CRUD operacije</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> REST API za integraciju</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Autentifikacija i autorizacija</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Pracenje inventara</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Beleske i komentari</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

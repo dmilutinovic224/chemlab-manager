@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3>{% if object %}Uredi jedinjenje{% else %}Dodaj jedinjenje{% endif %}</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Naziv jedinjenja:</label>
+                        <input type="text" name="name" class="form-control"
+                               value="{{ object.name|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">IUPAC naziv:</label>
+                        <input type="text" name="iupac" class="form-control"
+                               value="{{ object.iupac|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">SMILES:</label>
+                        <input type="text" name="smiles" class="form-control"
+                               value="{{ object.smiles|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">CAS broj:</label>
+                        <input type="text" name="cas_num" class="form-control"
+                               value="{{ object.cas_num|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Molekulska formula:</label>
+                        <input type="text" name="formula" class="form-control"
+                               value="{{ object.formula|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Molekulska masa (g/mol):</label>
+                        <input type="number" name="mweight" class="form-control" step="0.001"
+                               value="{{ object.mweight|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Oblast:</label>
+                        <select name="area" class="form-select">
+                            <option value="inorg" {% if object.area == inorg %}selected{% endif %}>Neorganska</option>
+                            <option value="org" {% if object.area == org %}selected{% endif %}>Organska</option>
+                            <option value="an" {% if object.area == an %}selected{% endif %}>Analiticka</option>
+                            <option value="phus" {% if object.area == phus %}selected{% endif %}>Fizicka</option>
+                            <option value="bch" {% if object.area == bch %}selected{% endif %}>Biohemija</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Kategorija:</label>
+                        {{ form.category }}
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="public" class="form-check-input" id="public"
+                               {% if object.public %}checked{% endif %}>
+                        <label class="form-check-label" for="public">Javno dostupno</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        {% if object %}Sacuvaj{% else %}Dodaj jedinjenje{% endif %}
+                    </button>
+                    <a href="{% if object %}{% url 'compound_detail' object.pk %}{% else %}{% url 'compound_list' %}{% endif %}" class="btn btn-secondary">Odustani</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

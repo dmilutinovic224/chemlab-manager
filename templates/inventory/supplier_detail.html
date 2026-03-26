@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h2>{{ supplier.name }}</h2>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <tr>
+                <th>Kontakt osoba:</th>
+                <td>{{ supplier.contact|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td>{% if supplier.email %}<a href="mailto:{{ supplier.email }}">{{ supplier.email }}</a>{% else %}-{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Telefon:</th>
+                <td>{{ supplier.phone|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>Website:</th>
+                <td>{% if supplier.website %}<a href="{{ supplier.website }}" target="_blank">{{ supplier.website }}</a>{% else %}-{% endif %}</td>
+            </tr>
+        </table>
+        
+        <a href="{% url 'supplier_list' %}" class="btn btn-secondary">Nazad</a>
+    </div>
+</div>
+{% endblock %}

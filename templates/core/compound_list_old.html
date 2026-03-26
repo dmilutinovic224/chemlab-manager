@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Jedinjenja</h1>
+
+{% if user.is_authenticated %}
+    <a href="{% url 'compound_create' %}" class="btn btn-primary mb-3">Dodaj jedinjenje</a>
+{% endif %}
+
+{% if compounds %}
+    <div class="row">
+        {% for compound in compounds %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ compound.name }}</h5>
+                        {% if compound.formula %}
+                            <p class="card-text"><strong>Formula:</strong> {{ compound.formula }}</p>
+                        {% endif %}
+
+                        <p class="text-muted">
+                            Autor: {{ compound.created_by.username }}<br>
+                            <small>Dodano: {{ compound.created|date:"d.m.Y" }}</small>
+                        </p>
+                        <p>
+                        {% if compound.public %}
+                            <span class="badge bg-success">Javno</span>
+                        {% else %}
+                            <span class="badge bg-warning">Privatno</span>
+                        {% endif %}
+                        </p>
+                    </div>
+                     <div class="card-footer">
+                    <a href="{% url 'compound_detail' compound.pk %}" class="btn btn-sm btn-primary">Detalji</a>
+                    {% if user == compound.created_by %}
+                        <a href="{% url 'compound_update' compound.pk %}" class="btn btn-sm btn-warning">Uredi</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Nema jedinjenja.</p>
+{% endif %}
+{% endblock %}

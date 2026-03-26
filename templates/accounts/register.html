@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3>Registracija</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Korisničko ime:</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email:</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ime:</label>
+                            <input type="text" name="first_name" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Prezime:</label>
+                            <input type="text" name="last_name" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Institucija:</label>
+                        <input type="text" name="institution" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Telefon:</label>
+                        <input type="text" name="phone_number" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Lozinka:</label>
+                        <input type="password" name="password1" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Potvrdi lozinku:</label>
+                        <input type="password" name="password2" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Registruj se</button>
+                </form>
+                
+                <hr>
+                <p>Imate nalog? <a href="{% url 'login' %}">Prijavi se</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

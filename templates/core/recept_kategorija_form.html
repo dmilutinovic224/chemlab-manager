@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h3>Dodaj kategoriju za "{{ recept.naziv }}"</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Kategorija:</label>
+                        <select name="kategorija" class="form-select" required>
+                            <option value="">--- Izaberi kategoriju ---</option>
+                            {% for kat in form.kategorija.field.queryset %}
+                                <option value="{{ kat.pk }}">{{ kat.naziv }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning">Dodaj kategoriju</button>
+                    <a href="{% url 'recept_detail' recept.pk %}" class="btn btn-secondary">Nazad na recept</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

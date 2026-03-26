@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Eksperimenti{% endblock %}
+
+{% block content %}
+<h1>Eksperimenti</h1>
+
+{% if user.is_authenticated %}
+    <a href="{% url 'experiment_create' %}" class="btn btn-primary mb-3">Dodaj eksperiment</a>
+{% endif %}
+
+<div class="row">
+    {% for experiment in experiments %}
+        <div class="col-md-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ experiment.title }}</h5>
+
+                    <div class="mb-2">
+                        <span class="badge bg-info">{{ experiment.get_experiment_type_display }}</span>
+                        <span class="badge bg-secondary">{{ experiment.get_status_display }}</span>
+                        {% if not experiment.is_public %}
+                            <span class="badge bg-warning">Privatno</span>
+                        {% endif %}
+                    </div>
+
+                    <p class="card-text">{{ experiment.description|truncatechars:150 }}</p>
+
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Autor: {{ experiment.created_by.username }} |
+                            Dodato: {{ experiment.created_at|date:"d.m.Y" }}
+                        </small>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'experiment_detail' experiment.pk %}" class="btn btn-sm btn-primary">Detalji</a>
+
+                    {% if experiment.created_by == user %}
+                        <a href="{% url 'experiment_update' experiment.pk %}" class="btn btn-sm btn-warning">Uredi</a>
+                        <a href="{% url 'experiment_delete' experiment.pk %}" class="btn btn-sm btn-danger">Obriši</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <p class="text-center">Nema pronađenih eksperimenata.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

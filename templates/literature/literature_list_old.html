@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Naučni radovi{% endblock %}
+
+{% block content %}
+<h1>Naučni radovi</h1>
+
+{% if user.is_authenticated %}
+    <a href="{% url 'literature_create' %}" class="btn btn-primary mb-3">Dodaj novi rad</a>
+{% endif %}
+
+<div class="row">
+    {% for paper in literature %}
+        <div class="col-md-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ paper.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ paper.authors|truncatechars:100 }}</h6>
+                    <p class="card-text">
+                        <strong>{{ paper.journal }}</strong> ({{ paper.year }})
+                        {% if paper.volume %}, Vol. {{ paper.volume }}{% endif %}
+                        {% if paper.pages %}, str. {{ paper.pages }}{% endif %}
+                    </p>
+                    {% if paper.doi %}
+                        <p class="card-text"><small>DOI: {{ paper.doi }}</small></p>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'literature_detail' paper.pk %}" class="btn btn-sm btn-primary">Detalji</a>
+                    {% if paper.uploaded_by == user %}
+                        <span class="badge bg-info">Vaš rad</span>
+                    {% endif %}
+                    {% if not paper.is_public %}
+                        <span class="badge bg-warning">Privatno</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <p class="text-center">Nema pronađenih radova.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

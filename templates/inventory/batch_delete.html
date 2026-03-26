@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h3>Potvrda brisanja serije</h3>
+            </div>
+            <div class="card-body">
+                <p>Jeste li sigurni da želite obrisati seriju <strong>"{{ batch.batch_number }}"</strong>?</p>
+                <p>Jedinjenje: {{ batch.chemical.name }}</p>
+                <p class="text-danger">Ova radnja je nepovratna! Brišu se i sve beleške vezane za ovu seriju.</p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Da, obriši</button>
+                    <a href="{% url 'batch_detail' batch.pk %}" class="btn btn-secondary">Odustani</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

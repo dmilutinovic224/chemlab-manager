@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Uredi dobavljača{% else %}Dodaj novog dobavljača{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3>{% if object %}Uredi dobavljača{% else %}Dodaj novog dobavljača{% endif %}</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.name.label }}</label>
+                        {{ form.name }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.contact.label }}</label>
+                        {{ form.contact }}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.email.label }}</label>
+                            {{ form.email }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.phone.label }}</label>
+                            {{ form.phone }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.website.label }}</label>
+                        {{ form.website }}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        {% if object %}Sačuvaj izmjene{% else %}Dodaj dobavljača{% endif %}
+                    </button>
+                    <a href="{% if object %}{% url 'supplier_detail' object.pk %}{% else %}{% url 'supplier_list' %}{% endif %}" 
+                       class="btn btn-secondary">Odustani</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Serija: {{ batch.batch_number }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h2>Serija: {{ batch.batch_number }}</h2>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <tr>
+                <th style="width: 200px;">Jedinjenje:</th>
+                <td>
+                    <a href="{% url 'chemical_detail' batch.chemical.pk %}">
+                        {{ batch.chemical.name }}
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <th>Dobavljač:</th>
+                <td>
+                    {% if batch.supplier %}
+                        <a href="{% url 'supplier_detail' batch.supplier.pk %}">
+                            {{ batch.supplier.name }}
+                        </a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Kataloški broj:</th>
+                <td>{{ batch.catalog_number|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>Količina:</th>
+                <td>{{ batch.quantity }} {{ batch.unit }}</td>
+            </tr>
+            <tr>
+                <th>Čistoća:</th>
+                <td>{% if batch.purity %}{{ batch.purity }}%{% else %}-{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Lokacija:</th>
+                <td>{{ batch.location|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>Datum prijema:</th>
+                <td>{{ batch.received_date|date:"d.m.Y" }}</td>
+            </tr>
+            <tr>
+                <th>Rok trajanja:</th>
+                <td>
+                    {% if batch.expiry_date %}
+                        {{ batch.expiry_date|date:"d.m.Y" }}
+                        {% if batch.is_expired %}
+                            <span class="badge bg-danger ms-2">ISTEKLO</span>
+                        {% endif %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Dokumenta:</th>
+                <td>
+                    {% if batch.msds %}
+                        <a href="{{ batch.msds.url }}" class="btn btn-sm btn-info" target="_blank">MSDS</a>
+                    {% endif %}
+                    {% if batch.coa %}
+                        <a href="{{ batch.coa.url }}" class="btn btn-sm btn-success" target="_blank">COA</a>
+                    {% endif %}
+                    {% if not batch.msds and not batch.coa %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>beleške:</th>
+                <td>{{ batch.notes|linebreaks|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>Autor:</th>
+                <td>{{ batch.created_by.username }}</td>
+            </tr>
+            <tr>
+                <th>Dodato:</th>
+                <td>{{ batch.created_at|date:"d.m.Y H:i" }}</td>
+            </tr>
+        </table>
+        
+        <hr>
+        <h4>Beleške</h4>
+        
+        {% if inv_notes %}
+            {% for note in batch.inv_notes.all %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <p class="card-text">{{ note.note|linebreaks }}</p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                {{ note.user.username }} - {{ note.created_at|date:"d.m.Y H:i" }}
+                            </small>
+                        </p>
+                        {% if user == note.user %}
+                            <a href="{% url 'inventory_note_delete' note.pk %}" 
+                               class="btn btn-sm btn-danger">Obriši</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">Još nema beleški.</p>
+        {% endif %}
+        
+        {% if user.is_authenticated %}
+            <a href="{% url 'inventory_note_create' batch.pk %}" class="btn btn-info mt-2">
+                + Dodaj belešku
+            </a>
+        {% endif %}
+        
+        <hr>
+        
+        {% if user == batch.created_by %}
+            <a href="{% url 'batch_update' batch.pk %}" class="btn btn-warning">Uredi seriju</a>
+            <a href="{% url 'batch_delete' batch.pk %}" class="btn btn-danger">Obriši seriju</a>
+        {% endif %}
+        
+        <a href="{% url 'batch_list' %}" class="btn btn-secondary">Nazad na listu</a>
+        <a href="{% url 'chemical_detail' batch.chemical.pk %}" class="btn btn-primary">
+            Nazad na jedinjenje
+        </a>
+    </div>
+</div>
+{% endblock %}

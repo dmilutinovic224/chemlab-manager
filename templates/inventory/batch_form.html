@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Uredi seriju{% else %}Dodaj novu seriju{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3>{% if object %}Uredi seriju{% else %}Dodaj  seriju{% endif %}</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.chemical.label }}</label>
+                            {{ form.chemical }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.supplier.label }}</label>
+                            {{ form.supplier }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.batch_number.label }}</label>
+                            {{ form.batch_number }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.catalog_number.label }}</label>
+                            {{ form.catalog_number }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">{{ form.quantity.label }}</label>
+                            {{ form.quantity }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">{{ form.unit.label }}</label>
+                            {{ form.unit }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">{{ form.purity.label }}</label>
+                            {{ form.purity }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.received_date.label }}</label>
+                            {{ form.received_date }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.expiry_date.label }}</label>
+                            {{ form.expiry_date }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.location.label }}</label>
+                        {{ form.location }}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.msds.label }}</label>
+                            {{ form.msds }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.coa.label }}</label>
+                            {{ form.coa }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.notes.label }}</label>
+                        {{ form.notes }}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        {% if object %}Sačuvaj{% else %}Dodaj seriju{% endif %}
+                    </button>
+                    <a href="{% if object %}{% url 'batch_detail' object.pk %}{% else %}{% url 'batch_list' %}{% endif %}" 
+                       class="btn btn-secondary">Odustani</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

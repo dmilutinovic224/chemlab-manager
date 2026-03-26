@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ experiment.title }}{% endblock %}
+
+{% block content %}
+<div class="hero text-center fade-in">
+    <div class="container">
+        <h1><i class="bi bi-capsule"></i>eksperimentalni podaci</h1>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h2>{{ experiment.title }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <span class="badge bg-info">{{ experiment.get_experiment_type_display }}</span>
+            <span class="badge bg-secondary">{{ experiment.get_status_display }}</span>
+            {% if experiment.is_public %}
+                <span class="badge bg-success">Javno</span>
+            {% else %}
+                <span class="badge bg-warning">Privatno</span>
+            {% endif %}
+        </div>
+
+        <h5>Opis:</h5>
+        <p>{{ experiment.description|linebreaks }}</p>
+
+        <p class="text-muted">
+            <small>
+                Autor: {{ experiment.created_by.username }} |
+                Kreirano: {{ experiment.created_at|date:"d.m.Y H:i" }} |
+                Zadnja izmena: {{ experiment.updated_at|date:"d.m.Y H:i" }}
+            </small>
+        </p>
+
+        {% if user == experiment.created_by %}
+            <hr>
+            <a href="{% url 'experiment_update' experiment.pk %}" class="btn btn-warning">Uredi</a>
+            <a href="{% url 'experiment_delete' experiment.pk %}" class="btn btn-danger">Obriši</a>
+        {% endif %}
+
+        <hr>
+        <h4>Beleške:</h4>
+
+        {% if notes %}
+            {% for note in notes %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <p class="card-text">{{ note.note|linebreaks }}</p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                {{ note.user.username }} - {{ note.created_at|date:"d.m.Y H:i" }}
+                            </small>
+                        </p>
+                        {% if user == note.user %}
+                            <a href="{% url 'experiment_note_delete' note.pk %}"
+                               class="btn btn-sm btn-danger">Obriši</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">Još nema beleški.</p>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'experiment_note_create' experiment.pk %}" class="btn btn-info mt-3">Dodaj belešku</a>
+        {% endif %}
+
+        <hr>
+        <a href="{% url 'experiment_list' %}" class="btn btn-secondary">Nazad</a>
+    </div>
+</div>
+{% endblock %}

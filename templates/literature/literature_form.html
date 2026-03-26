@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Uredi rad{% else %}Dodaj novi rad{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3>{% if object %}Uredi rad{% else %}Dodaj novi rad{% endif %}</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Naslov:</label>
+                        <input type="text" name="title" class="form-control" 
+                               value="{{ object.title|default:'' }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Autori:</label>
+                        <textarea name="authors" class="form-control" rows="3" required>{{ object.authors|default:'' }}</textarea>
+                        <small class="text-muted">Odvojite zarezima (npr. Prezime, I.; Prezime, I.)</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Časopis:</label>
+                        <input type="text" name="journal" class="form-control" 
+                               value="{{ object.journal|default:'' }}" required>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Godina:</label>
+                            <input type="number" name="year" class="form-control" 
+                                   value="{{ object.year|default:'' }}" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Volumen:</label>
+                            <input type="text" name="volume" class="form-control" 
+                                   value="{{ object.volume|default:'' }}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Broj:</label>
+                            <input type="text" name="issue" class="form-control" 
+                                   value="{{ object.issue|default:'' }}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Stranice:</label>
+                            <input type="text" name="pages" class="form-control" 
+                                   value="{{ object.pages|default:'' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">DOI:</label>
+                        <input type="text" name="doi" class="form-control" 
+                               value="{{ object.doi|default:'' }}">
+                        <small class="text-muted">npr. 10.1021/acs.joc.0c01234</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">PDF:</label>
+                        <input type="file" name="pdf" class="form-control">
+                        {% if object.pdf %}
+                            <small>Trenutni PDF: <a href="{{ object.pdf.url }}">{{ object.pdf.name }}</a></small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="is_public" class="form-check-input" id="is_public"
+                               {% if object.is_public %}checked{% endif %}>
+                        <label class="form-check-label" for="is_public">Javno dostupno</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        {% if object %}Sačuvaj izmjene{% else %}Dodaj rad{% endif %}
+                    </button>
+                    <a href="{% if object %}{% url 'literature_detail' object.pk %}{% else %}{% url 'literature_list' %}{% endif %}" 
+                       class="btn btn-secondary">Odustani</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

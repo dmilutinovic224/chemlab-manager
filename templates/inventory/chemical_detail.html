@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ chemical.name }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h2>{{ chemical.name }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            {% if chemical.is_public %}
+                <span class="badge bg-success">Javno</span>
+            {% else %}
+                <span class="badge bg-warning">Privatno</span>
+            {% endif %}
+        </div>
+
+        <table class="table table-striped">
+            <tr>
+                <th style="width: 200px;">CAS broj:</th>
+                <td>{{ chemical.cas_number|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>Formula:</th>
+                <td>{{ chemical.formula|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>Molekulska masa:</th>
+                <td>
+                    {% if chemical.molecular_weight %}
+                        {{ chemical.molecular_weight }} g/mol
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>UN broj:</th>
+                <td>{{ chemical.un_number|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>GHS simboli:</th>
+                <td>
+                    {% if chemical.hazard_symbols %}
+                        {% for sym in chemical.hazard_symbols.split %}
+                            <span class="badge bg-danger me-1">{{ sym }}</span>
+                        {% endfor %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Veya sa jedinjenjem:</th>
+                <td>
+                    {% if chemical.compound %}
+                        <a href="{% url 'compound_detail' chemical.compound.pk %}">
+                            {{ chemical.compound.name }}
+                        </a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Autor:</th>
+                <td>{{ chemical.created_by.username }}</td>
+            </tr>
+            <tr>
+                <th>Dodato:</th>
+                <td>{{ chemical.created_at|date:"d.m.Y H:i" }}</td>
+            </tr>
+            <tr>
+                <th>Poslednja izmena:</th>
+                <td>{{ chemical.updated_at|date:"d.m.Y H:i" }}</td>
+            </tr>
+        </table>
+
+        <hr>
+        <h4>Serije / šarže</h4>
+
+        {% if chemical.batches.all %}
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th>Broj šarže</th>
+                            <th>Dobavljač</th>
+                            <th>Količina</th>
+                            <th>Rok trajanja</th>
+                            <th>Lokacija</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for batch in chemical.batches.all %}
+                            <tr>
+                                <td>{{ batch.batch_number }}</td>
+                                <td>{{ batch.supplier.name|default:"-" }}</td>
+                                <td>{{ batch.quantity }} {{ batch.unit }}</td>
+                                <td>
+                                    {% if batch.expiry_date %}
+                                        {{ batch.expiry_date|date:"d.m.Y" }}
+                                        {% if batch.is_expired %}
+                                            <span class="badge bg-danger">ISTEKLO</span>
+                                        {% endif %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ batch.location|default:"-" }}</td>
+                                <td>
+                                    <a href="{% url 'batch_detail' batch.pk %}"
+                                       class="btn btn-sm btn-info">Detalji</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">Nema serija za ovo jedinjenje.</p>
+        {% endif %}
+
+        {% if user == chemical.created_by %}
+            <a href="{% url 'batch_create' %}?chemical={{ chemical.pk }}"
+               class="btn btn-success mb-3">Dodaj novu seriju</a>
+        {% endif %}
+
+        {% if notes %}
+            <hr>
+            <h4>Beleške</h4>
+            {% for note in notes %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <p class="card-text">{{ note.note|linebreaks }}</p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                {{ note.user.username }} - {{ note.created_at|date:"d.m.Y H:i" }}
+                            </small>
+                        </p>
+                        {% if user == note.user %}
+                            <a href="{% url 'inventory_note_delete' note.pk %}"
+                               class="btn btn-sm btn-danger">Obriši</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+{#        {% if user.is_authenticated %}#}
+{#            <a href="{% url 'inventory_note_create' chemical.pk %}"#}
+{#               class="btn btn-info mt-3">Dodaj belešku</a>#}
+{#        {% endif %}#}
+
+        <hr>
+
+        {% if user == chemical.created_by %}
+            <a href="{% url 'chemical_update' chemical.pk %}" class="btn btn-warning">Uredi </a>
+            <a href="{% url 'chemical_delete' chemical.pk %}" class="btn btn-danger">Obriši </a>
+        {% endif %}
+
+        <a href="{% url 'chemical_list' %}" class="btn btn-secondary">Nazad</a>
+    </div>
+</div>
+{% endblock %}

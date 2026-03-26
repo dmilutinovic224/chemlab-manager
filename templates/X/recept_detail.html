@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1>{{ recept.naziv }}</h1>
+    </div>
+    {% if recept.receptkategorija_set.all %}
+        <p>
+            <strong>Kategorije:</strong>
+            {% for rk in recept.receptkategorija_set.all %}
+                <span class="badge bg-warning">{{ rk.kategorija.naziv }}</span>
+            {% endfor %}
+        </p>
+    {% endif %}
+    {% if user == recept.autor %}
+        <a href="{% url 'recept_kategorija_create' recept.pk %}" class="btn btn-warning btn-sm mb-3">Dodaj kategoriju</a>
+    {% endif %}
+    <div class="card-body">
+        <h5>Opis:</h5>
+        <p>{{ recept.opis }}</p>
+        
+        <h5>Detalji:</h5>
+        <ul>
+            <li>Autor: {{ recept.autor.username }}</li>
+            <li>Dodano: {{ recept.created|date:"d.m.Y" }}</li>
+            <li>Status: {{ recept.javno|yesno:"Javno,Privatno" }}</li>
+        </ul>
+        {% if user == recept.autor %}
+            <a href="{% url 'recept_update' recept.pk %}" class="btn btn-warning">Uredi</a>
+            <a href="{% url 'recept_delete' recept.pk %}" class="btn btn-danger">Obrisi</a>
+        {% endif %}
+        <a href="{% url 'recept_list' %}" class="btn btn-secondary">Nazad</a>
+
+        {% if recept.sastojci.all %}
+            <h5>Sastojci:</h5>
+             <ul class="list-group mb-3">
+                 {% for sastojak in recept.sastojci.all %}
+                     <li class="list-group-item">
+                        <strong>{{ sastojak.naziv }}</strong> - {{ sastojak.kolicina }}
+                     </li>
+                 {% endfor %}
+            </ul>
+        {% endif %}
+        {% if user == recept.autor %}
+            <a href="{% url 'sastojak_create' recept.pk %}" class="btn btn-success btn-sm mb-3">
+                + Dodaj sastojak
+            </a>
+        {% endif %}
+        {% if recept.komentari.all %}
+            {% for komentar in recept.komentari.all %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <p class="card-text">{{ komentar.tekst }}</p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                {{ komentar.autor.username }} - {{ komentar.created|date:"d.m.Y H:i" }}
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">Još nema komentara.</p>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <a href="{% url 'komentar_create' recept.pk %}" class="btn btn-info mb-3">
+                Dodaj komentar
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

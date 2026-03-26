@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Uredi jedinjenje{% else %}Dodaj novo jedinjenje{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3>{% if object %}Uredi jedinjenje{% else %}Dodaj novo jedinjenje{% endif %}</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.name.label }}</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="alert alert-danger">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.cas_number.label }}</label>
+                            {{ form.cas_number }}
+                            {% if form.cas_number.help_text %}
+                                <small class="text-muted">{{ form.cas_number.help_text }}</small>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.formula.label }}</label>
+                            {{ form.formula }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.molecular_weight.label }}</label>
+                            {{ form.molecular_weight }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.un_number.label }}</label>
+                            {{ form.un_number }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.hazard_symbols.label }}</label>
+                        {{ form.hazard_symbols }}
+                        {% if form.hazard_symbols.help_text %}
+                            <small class="text-muted">{{ form.hazard_symbols.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.compound.label }}</label>
+                        {{ form.compound }}
+                        {% if form.compound.help_text %}
+                            <small class="text-muted">{{ form.compound.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        {{ form.is_public }}
+                        <label class="form-check-label">{{ form.is_public.label }}</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        {% if object %}Sačuvaj{% else %}Dodaj jedinjenje{% endif %}
+                    </button>
+                    <a href="{% if object %}{% url 'chemical_detail' object.pk %}{% else %}{% url 'chemical_list' %}{% endif %}" 
+                       class="btn btn-secondary">Odustani</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
