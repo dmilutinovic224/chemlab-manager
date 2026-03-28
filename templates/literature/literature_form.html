@@ -58,6 +58,13 @@
                         <label class="form-label">DOI:</label>
                         <input type="text" name="doi" class="form-control" 
                                value="{{ object.doi|default:'' }}">
+                        {% if form.doi.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.doi.errors %}
+                                        <i class="bi bi-exclamation-triangle"></i> {{ error }}
+                                    {% endfor %}
+                                 </div>
+                            {% endif %}
                         <small class="text-muted">npr. 10.1021/acs.joc.0c01234</small>
                     </div>
                     

@@ -23,6 +23,20 @@ class CompoundForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-select'}),
             'field': forms.Select(attrs={'class': 'form-select'}),
         }
+
+    def clean_mweight(self):
+        mw = self.cleaned_data.get('mweight')
+        if mw is not None and mw <= 0:
+            raise forms.ValidationError('molekulska masa mora biti prirodan broj')
+        return mw
+
+    def clean_smiles(self):
+        smiles = self.cleaned_data.get('smiles')
+        if smiles:
+            if ' ' in smiles:
+                raise forms.ValidationError('smiles unos ne sme da ima razmak')
+        return smiles
+
 class PropertyForm(forms.ModelForm):
     class Meta:
         model = Property

@@ -23,7 +23,7 @@ class Experiment(models.Model):
     experiment_type = models.CharField(max_length=50, choices=TYPES)
     status = models.CharField(max_length=50, choices=STATUS)
     compounds = models.ManyToManyField(Compound, related_name='experiments',blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,)
     is_public = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

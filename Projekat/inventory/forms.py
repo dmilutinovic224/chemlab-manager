@@ -46,6 +46,20 @@ class BatchForm(forms.ModelForm):
             'coa': forms.FileInput(attrs={'class': 'form-control'}),
             'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
+
+    def clean_quantity(self):
+        quantity = self.cleaned_data.get('quantity')
+        if quantity <= 0:
+            raise forms.ValidationError('kolicina mora biti pozitivna')
+        return quantity
+
+    def clean_purity(self):
+        purity = self.cleaned_data.get('purity')
+        if purity < 0 or purity > 100:
+            raise forms.ValidationError('cistoca mora biti izmedju 0 i 100%')
+        return purity
+
+
 class InventoryNoteForm(forms.ModelForm):
     class Meta:
         model = InventoryNote

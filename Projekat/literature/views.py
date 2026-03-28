@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.db import models
 from Projekat.literature.forms import LiteratureForm, LiteratureNoteForm
 from Projekat.literature.models import Literature, LiteratureNote
-
+from django.db.models import Q
 
 class LiteratureListView(ListView):
     model = Literature
@@ -14,7 +14,11 @@ class LiteratureListView(ListView):
     paginate_by = 8
 
     def get_queryset(self):
-        return Literature.objects.filter(is_public=True)
+        q= Literature.objects.filter(is_public=True)
+        search = self.request.GET.get('search')
+        if search:
+            q = q.filter(Q(title__icontains=search) | Q(authors__icontains=search) | Q(journal__icontains=search) | Q(doi__icontains=search))
+        return q
 
 class LiteratureDetailView(DetailView):
     model = Literature

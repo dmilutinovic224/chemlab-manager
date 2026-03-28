@@ -48,7 +48,7 @@ class Compound(models.Model):
     mweight = models.FloatField(null=True, blank=True)
     cas_num = models.CharField(max_length=50, blank=True)
     public = models.BooleanField(default=False)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='compounds') #NE MENJAJ!!!!!!
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='compounds') #NE MENJAJ!!!!!!
     created = models.DateTimeField(auto_now_add=True)
     uploaded = models.DateTimeField(auto_now=True)
     category = models.CharField(max_length=50, choices=CATEGS, blank=True,null=True,)

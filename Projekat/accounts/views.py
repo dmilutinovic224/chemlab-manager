@@ -1,9 +1,9 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, UpdateView
+from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 
 from Projekat.accounts.forms import CustomUserCreationForm, CustomUserChangeForm
 from Projekat.accounts.models import CustomUser
@@ -36,4 +36,18 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user
+
+class ProfileDeleteView(LoginRequiredMixin, DeleteView):
+    model = CustomUser
+    template_name = 'accounts/profile_delete.html'
+    success_url = reverse_lazy('home')
+
+    def get_object(self):
+        return self.request.user
+
+    def delete(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.delete()
+        logout(request)
+        return redirect(self.success_url)
 # Create your views here.

@@ -7,7 +7,7 @@ from django.contrib import messages
 from Projekat.core.tasks import calculatecompoundprops, generatesmiles3d
 from Projekat.core.smiles import smiles3d
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.db.models import Q
 from Projekat.core.forms import CompoundForm, PropertyForm, ComentForm
 from Projekat.core.models import Compound, Property, Coment
 
@@ -20,9 +20,14 @@ class CompoundListView(ListView):
     model = Compound
     template_name = 'core/compound_list.html'
     context_object_name = 'compounds'
+    paginate_by = 6
 
     def get_queryset(self):
-        return Compound.objects.filter(public=True).order_by('-created_by')
+        q = Compound.objects.filter(public=True).order_by('-created_by')
+        search= self.request.GET.get('search')
+        if search:
+            q= q.filter(Q(name__icontains=search) | Q(formula__icontains=search) | Q(smiles__icontains=search) | Q(iupac__icontains=search))
+        return q
 
 class CompoundDetailView(DetailView):
     model = Compound

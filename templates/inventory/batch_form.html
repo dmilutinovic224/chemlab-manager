@@ -39,6 +39,13 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label">{{ form.quantity.label }}</label>
                             {{ form.quantity }}
+                            {% if form.quantity.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.quantity.errors %}
+                                        <i class="bi bi-exclamation-triangle"></i> {{ error }}
+                                    {% endfor %}
+                                 </div>
+                            {% endif %}
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">{{ form.unit.label }}</label>
@@ -47,6 +54,13 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label">{{ form.purity.label }}</label>
                             {{ form.purity }}
+                            {% if form.purity.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.purity.errors %}
+                                        <i class="bi bi-exclamation-triangle"></i> {{ error }}
+                                    {% endfor %}
+                                 </div>
+                            {% endif %}
                         </div>
                     </div>
                     

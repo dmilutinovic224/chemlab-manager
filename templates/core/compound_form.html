@@ -27,6 +27,13 @@
                         <label class="form-label">SMILES:</label>
                         <input type="text" name="smiles" class="form-control"
                                value="{{ object.smiles|default:'' }}">
+                        {% if form.smiles.errors %}
+                            <div class="text-danger small">
+                                {% for error in form.smiles.errors %}
+                                    <i class="bi bi-exclamation-triangle"></i> {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="mb-3">
@@ -45,6 +52,13 @@
                         <label class="form-label">Molekulska masa (g/mol):</label>
                         <input type="number" name="mweight" class="form-control" step="0.001"
                                value="{{ object.mweight|default:'' }}">
+                        {% if form.mweight.errors %}
+                            <div class="text-danger small">
+                                {% for error in form.mweight.errors %}
+                                    <i class="bi bi-exclamation-triangle"></i> {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="mb-3">

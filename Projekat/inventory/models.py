@@ -61,7 +61,7 @@ class Batch(models.Model):
     msds = models.FileField(upload_to='inventory/msds/', null=True, blank=True)
     coa = models.FileField(upload_to='inventory/coa/', null=True, blank=True)
     notes = models.TextField(blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

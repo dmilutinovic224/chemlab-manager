@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
+from django.db.models import Q
 from Projekat.inventory.forms import SupplierForm, ChemicalForm, BatchForm, InventoryNoteForm
 from Projekat.inventory.models import Supplier, Chemical, Batch, InventoryNote
 
@@ -12,6 +12,13 @@ class SupplierListView(ListView):
     template_name = 'inventory/supplier_list.html'
     context_object_name = 'suppliers'
     paginate_by = 4
+
+    def get_queryset(self):
+        q= Supplier.objects.all()
+        search = self.request.GET.get('search')
+        if search:
+            q = q.filter(Q(name__icontains=search) | Q(contact__icontains=search) | Q(email__icontains=search) )
+        return q
 
 class SupplierDetailView(DetailView):
     model = Supplier
@@ -52,6 +59,13 @@ class ChemicalListView(ListView):
     template_name = 'inventory/chemical_list.html'
     context_object_name = 'chemicals'
     paginate_by = 4
+
+    def get_queryset(self):
+        q= Chemical.objects.all()
+        search = self.request.GET.get('search')
+        if search:
+            q = q.filter(Q(name__icontains=search) | Q(cas_number__icontains=search) | Q(formula__icontains=search) )
+        return q
 
 class ChemicalDetailView(DetailView):
     model = Chemical
@@ -94,7 +108,11 @@ class BatchListView(ListView):
     # paginate_by = 4
 
     def get_queryset(self):
-        return Batch.objects.all()
+        q= Batch.objects.all()
+        search = self.request.GET.get('search')
+        if search:
+            q = q.filter(Q(batch_number__icontains=search) | Q(chemical__name__icontains=search) | Q(catalog__icontains=search))
+        return q.select_related('chemical', 'supplier')
 
 class BatchDetailView(DetailView):
     model = Batch

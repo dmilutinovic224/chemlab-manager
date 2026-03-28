@@ -22,6 +22,14 @@ class LiteratureForm(forms.ModelForm):
             'doi': 'DOI',
             'is_public': 'Javno dostupno',
         }
+
+    def clean_doi(self):
+        doi = self.cleaned_data.get('doi')
+        if doi:
+            if not doi.startswith('10.'):
+                raise forms.ValidationError('doi mora poceti sa 10.')
+        return doi
+
 class LiteratureNoteForm(forms.ModelForm):
     class Meta:
         model = LiteratureNote

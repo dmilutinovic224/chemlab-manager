@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.db import models
 from Projekat.experiments.forms import ExperimentForm, ExperimentNoteForm
 from Projekat.experiments.models import Experiment, ExperimentNote
-
+from django.db.models import Q
 
 class ExperimentListView(ListView):
     model = Experiment
@@ -14,7 +14,11 @@ class ExperimentListView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        return Experiment.objects.filter(is_public=True)
+        q= Experiment.objects.filter(is_public=True)
+        search = self.request.GET.get('search')
+        if search:
+            q = q.filter(Q(title__icontains=search) | Q(description__icontains=search) )
+        return q
 
 class ExperimentDetailView(DetailView):
     model = Experiment
